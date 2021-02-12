@@ -2,6 +2,7 @@
   "name": "cstech-backend",
   "version": "0.0.0",
   "private": true,
+  "main": "./bin/www",
   "scripts": {
     "start": "node ./bin/www"
   },
@@ -14,5 +15,8 @@
     "jade": "~1.11.0",
     "mongoose": "^5.11.15",
     "morgan": "~1.9.1"
+  },
+  "engines": {
+    "node": "14.15.0"
   }
 }

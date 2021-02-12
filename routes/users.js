@@ -13,5 +13,7 @@ router.post('/deleteEmpbyId',controller.deleteEmpbyID);
 
 router.post('/search',controller.search);
 
+router.get('/time',controller.getTimeWiseData)
+
 
 module.exports = router;

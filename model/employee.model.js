@@ -10,6 +10,8 @@ var EmployeeSchema = new Schema({
 
 
 
+},{
+    timestamps:true
 });
 
 module.exports = mongoose.model('Employee', EmployeeSchema);

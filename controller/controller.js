@@ -107,3 +107,30 @@ else if(req.body.type=="designation"){
     })
 }
 }
+
+exports.getTimeWiseData=function(req,res,next){
+    console.log('raja')
+    var daya=new Date(ISODate().getTime() - 1000*60*60*24*30);
+    console.log(daya)
+    // Employee.aggregate([
+    //     // Get only records created in the last 30 days
+    //     {$match:{
+    //           "createdAt":{$gt: new Date(ISODate().getTime() - 1000*60*60*24*30)}
+    //     }}, 
+    //     // Get the year, month and day from the createdAt
+    //     {$project:{
+    //           "year":{$year:"$createdAt"}, 
+    //           "month":{$month:"$createdAt"}, 
+    //           "day": {$dayOfMonth:"$createdAt"}
+    //     }}, 
+    //     // Group by year, month and day and get the count
+    //     {$group:{
+    //           _id:{year:"$year", month:"$month", day:"$day"}, 
+    //           "count":{$sum:1}
+    //     }}
+    // ]).exec((err,result)=>{
+    //     if(result){
+    //         res.send(result)
+    //     }
+    // })
+}
