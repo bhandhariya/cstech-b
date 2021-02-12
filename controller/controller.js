@@ -85,6 +85,8 @@ exports.SaveEditEmployee=function(req,res,next){
            }).exec((err,result)=>{
                if(result){
                    res.send(result)
+               }else{
+                   res.send(result)
                }
            })
             
