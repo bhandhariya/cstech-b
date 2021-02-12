@@ -4,7 +4,7 @@ var Designation=require('./designation_model')
 var EmployeeSchema = new Schema({
    
     name:{type:Schema.Types.String,required:true},
-    email:{type:Schema.Types.String,required:true},
+    email:{type:Schema.Types.String,required:true,unique:true},
     salary:{type:Schema.Types.Number,required:true},
     designation:{type:Schema.ObjectId,ref:'Designation'}
 

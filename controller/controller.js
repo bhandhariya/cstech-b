@@ -2,150 +2,192 @@ var Employee=require('../model/employee.model');
 var Designation=require('../model/designation_model');
 
 exports.createNewDesignation=function(req,res,next){
+
+    try{
+        var designatin = new Designation({
+            title:req.body.title
+        })
     
-    console.log(req.body)
-    var designatin = new Designation({
-        title:req.body.title
-    })
-    console.log(designatin)
-    designatin.save((err,result)=>{
-        if(result){
-            console.log(result);
-            res.send(result)
-        }else{
-            console.log(err)
-        }
-    })
+        designatin.save((err,result)=>{
+            if(result){
+                console.log(result);
+                res.send(result)
+            }else{
+                console.log(err)
+            }
+        })
+    }catch(err){
+        res.send(err)
+    }
+
+    
     
 }
 exports.getAllDesignation=function(req,res,next){
    
-    var des=Designation.find().exec((err,result)=>{
-        if(result){
-            res.send(result);
-        }
-    })
-    
+    try{
+        var des=Designation.find().exec((err,result)=>{
+            if(result){
+                res.send(result);
+            }
+        })    
+    }catch(err){
+        return res.send(err)
+    } 
 }
 exports.createNewEmployee=function(req,res,next){
+
+    try{
+        var emp = new Employee({
+            name:req.body.name,
+            email:req.body.email,
+            salary:req.body.salary,
+            designation:req.body.designation,
+        })
     
-    console.log(req.body)
-    var emp = new Employee({
-        name:req.body.name,
-        email:req.body.email,
-        salary:req.body.salary,
-        designation:req.body.designation,
-    })
-    console.log(emp)
-    emp.save((err,result)=>{
-        if(result){
-            console.log(result);
-            res.send(result)
-        }else{
-            console.log(err)
-        }
-    })
+        emp.save((error,result)=>{
+            if(result){
+                res.send(result)
+            }else if(error){
+                return res.send(error)
+            }
+        })
+    }catch(err){
+        return res.send(err)
+    }
+
+    
     
 }
 exports.getAllEmployee=function(req,res,next){
    
-    var des=Employee.find().populate('designation').exec((err,result)=>{
-        if(result){
-            res.send(result);
-        }
-    })
+    try{
+        var des=Employee.find().populate('designation').exec((err,result)=>{
+            if(result){
+                res.send(result);
+            }
+        })
+    }catch(err){
+        return res.send(err)
+    }
+    
     
 }
 
 exports.SaveEditEmployee=function(req,res,next){
-   Employee.findByIdAndUpdate(req.body.id,{
-    name:req.body.name,
-    email:req.body.email,
-    salary:req.body.salary,
-    designation:req.body.designation,
-   }).exec((err,result)=>{
-       if(result){
-           res.send(result)
-       }
-   })
+  
+    try{
+        Employee.findByIdAndUpdate(req.body.id,{
+            name:req.body.name,
+            email:req.body.email,
+            salary:req.body.salary,
+            designation:req.body.designation,
+           }).exec((err,result)=>{
+               if(result){
+                   res.send(result)
+               }
+           })
+            
+    }catch(err){
+        return res.send(err)
+    }
     
 }
 
 exports.deleteEmpbyID =function(req,res,next){
-    Employee.findByIdAndRemove(req.body.id).exec((err,result)=>{
-        if(result){
-            res.send(result)
-        }
-    })
+    
+    try{
+        Employee.findByIdAndRemove(req.body.id).exec((err,result)=>{
+            if(result){
+                res.send(result)
+            }
+        })
+    }catch(err){
+        return res.send(err)
+    }
+    
 }
 
 exports.search =function(req,res,next){
-if(req.body.type=="name"){
-    Employee.find({name:{
-        $regex:req.body.value
-    }}).populate('designation').exec((err,result)=>{
-        res.send(result)
-    })
-}
-else if(req.body.type=="email"){
-    Employee.find({email:{
-        $regex:req.body.value
-    }}).populate('designation').exec((err,result)=>{
-        res.send(result)
-    })
-}
-else if(req.body.type=="salary"){
-    Employee.find({salary:{
-        $gt:req.body.lt,$lt:req.body.gt
-    }}).populate('designation').exec((err,result)=>{
-        res.send(result)
-    })
-}
-else if(req.body.type=="designation"){
-    Employee.find({designation:req.body.value}).populate('designation').exec((err,result)=>{
-        res.send(result)
-    })
-}
+
+    try{
+        if(req.body.type=="name"){
+            Employee.find({name:{
+                $regex:req.body.value
+            }}).populate('designation').exec((err,result)=>{
+                res.send(result)
+            })
+        }
+        else if(req.body.type=="email"){
+            Employee.find({email:{
+                $regex:req.body.value
+            }}).populate('designation').exec((err,result)=>{
+                res.send(result)
+            })
+        }
+        else if(req.body.type=="salary"){
+            Employee.find({salary:{
+                $gt:req.body.lt,$lt:req.body.gt
+            }}).populate('designation').exec((err,result)=>{
+                res.send(result)
+            })
+        }
+        else if(req.body.type=="designation"){
+            Employee.find({designation:req.body.value}).populate('designation').exec((err,result)=>{
+                res.send(result)
+            })
+        }
+    }catch(err){
+        return res.send(err)
+    }
+
+    
 }
 
 exports.getTimeWiseData=function(req,res,next){
-    console.log('raja')
-    const now = new Date();
+    try{
+        const now = new Date();
     
   
-    Employee.aggregate([
-        // Get only records created in the last 30 days
-        {$match:{
-              "createdAt":{$lt: now}
-        }}, 
-        // Get the year, month and day from the createdAt
-        {$project:{
-              "year":{$year:"$createdAt"}, 
-              "month":{$month:"$createdAt"}, 
-              "day": {$dayOfMonth:"$createdAt"}
-        }}, 
-        // Group by year, month and day and get the count
-        {$group:{
-              _id:{year:"$year", month:"$month", day:"$day"}, 
-              "count":{$sum:1}
-        }}
-    ]).exec((err,result)=>{
-        if(result){
-            res.send(result)
-        }
-    })
+        Employee.aggregate([
+            // Get only records created in the last 30 days
+            {$match:{
+                  "createdAt":{$lt: now}
+            }}, 
+            // Get the year, month and day from the createdAt
+            {$project:{
+                  "year":{$year:"$createdAt"}, 
+                  "month":{$month:"$createdAt"}, 
+                  "day": {$dayOfMonth:"$createdAt"}
+            }}, 
+            // Group by year, month and day and get the count
+            {$group:{
+                  _id:{year:"$year", month:"$month", day:"$day"}, 
+                  "count":{$sum:1}
+            }}
+        ]).exec((err,result)=>{
+            if(result){
+                res.send(result)
+            }
+        })
+    }catch(err){
+        return res.send(err)
+    }
+    
 }
 exports.test=function(req,res,next){
-    const now = new Date();
-//     // const old=new Date.today().add(-30).days();
-//     // var today = new Date()
-// var priorDate = new Date().setDate(now.getDate()-30)
-//     // const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-//     res.send({date:priorDate})
 
-// 
-res.send({today:now})
-
-
-
+    var e=new Employee({
+        name:'raja',
+        email:"saini@g.com",
+        salary:21212,
+        designation:"60261c17a38f813680fd06af"    
+    })
+    e.save((err,result)=>{
+        if(err){
+            res.send(err)
+        }else{
+            console.log(result)
+        }
+    })
 }
