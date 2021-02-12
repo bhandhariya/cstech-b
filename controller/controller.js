@@ -96,13 +96,13 @@ else if(req.body.type=="email"){
 }
 else if(req.body.type=="salary"){
     Employee.find({salary:{
-        $regex:req.body.value
+        $gt:req.body.lt,$lt:req.body.gt
     }}).populate('designation').exec((err,result)=>{
         res.send(result)
     })
 }
 else if(req.body.type=="designation"){
-    Employee.find({designation:req.body.designation}).populate('designation').exec((err,result)=>{
+    Employee.find({designation:req.body.value}).populate('designation').exec((err,result)=>{
         res.send(result)
     })
 }
@@ -110,27 +110,42 @@ else if(req.body.type=="designation"){
 
 exports.getTimeWiseData=function(req,res,next){
     console.log('raja')
-    var daya=new Date(ISODate().getTime() - 1000*60*60*24*30);
-    console.log(daya)
-    // Employee.aggregate([
-    //     // Get only records created in the last 30 days
-    //     {$match:{
-    //           "createdAt":{$gt: new Date(ISODate().getTime() - 1000*60*60*24*30)}
-    //     }}, 
-    //     // Get the year, month and day from the createdAt
-    //     {$project:{
-    //           "year":{$year:"$createdAt"}, 
-    //           "month":{$month:"$createdAt"}, 
-    //           "day": {$dayOfMonth:"$createdAt"}
-    //     }}, 
-    //     // Group by year, month and day and get the count
-    //     {$group:{
-    //           _id:{year:"$year", month:"$month", day:"$day"}, 
-    //           "count":{$sum:1}
-    //     }}
-    // ]).exec((err,result)=>{
-    //     if(result){
-    //         res.send(result)
-    //     }
-    // })
+    const now = new Date();
+    
+  
+    Employee.aggregate([
+        // Get only records created in the last 30 days
+        {$match:{
+              "createdAt":{$lt: now}
+        }}, 
+        // Get the year, month and day from the createdAt
+        {$project:{
+              "year":{$year:"$createdAt"}, 
+              "month":{$month:"$createdAt"}, 
+              "day": {$dayOfMonth:"$createdAt"}
+        }}, 
+        // Group by year, month and day and get the count
+        {$group:{
+              _id:{year:"$year", month:"$month", day:"$day"}, 
+              "count":{$sum:1}
+        }}
+    ]).exec((err,result)=>{
+        if(result){
+            res.send(result)
+        }
+    })
+}
+exports.test=function(req,res,next){
+    const now = new Date();
+//     // const old=new Date.today().add(-30).days();
+//     // var today = new Date()
+// var priorDate = new Date().setDate(now.getDate()-30)
+//     // const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+//     res.send({date:priorDate})
+
+// 
+res.send({today:now})
+
+
+
 }
