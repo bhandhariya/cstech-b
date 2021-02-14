@@ -6,7 +6,9 @@ var logger = require('morgan');
 var cors=require('cors')
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-
+const  passport  =  require('passport');
+const  LocalStrategy  =  require('passport-local').Strategy;
+var User=require('./model/user_model')
 var app = express();
 
 var db=require('./db')
@@ -22,6 +24,70 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use(passport.initialize());
+app.use(passport.session());
+
+const isLoggedIn = (req, res, next) => {
+  if(req.isAuthenticated()){
+      return next()
+  }
+  return res.status(400).json({"statusCode" : 400, "message" : "not authenticated"})
+}
+
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    console.log(username,password)
+    
+      // if(username === "admin" && password === "admin"){
+      //   console.log('raja')
+      //     return done(null, username);
+      // } else {
+      //     return done("unauthorized access", false);
+      // }
+      User.findOne({ username: username }, function (err, user) {
+        if (err) { return done(err); }
+        // Return if user not found in database
+        if (!user) {
+          return done(null, false, {
+            message: 'User not found'
+          });
+        }
+        console.log(user)
+        // Return if password is wrong
+        if (password != user.password) {
+          return done(null, false, {
+            message: 'Password is wrong'
+          });
+        }
+        // If credentials are correct, return the user object
+        return done(null, user);
+      });
+  }
+));
+passport.serializeUser(function(user, done) {
+  if(user) done(null, user);
+});
+
+passport.deserializeUser(function(id, done) {
+  done(null, id);
+});
+
+const auth = () => {
+  return (req, res, next) => {
+      passport.authenticate('local', (error, user, info) => {
+          if(error) res.status(400).json({"statusCode" : 200 ,"message" : error});
+          req.login(user, function(error) {
+              if (error) return next(error);
+              next();
+          });
+      })(req, res, next);
+  }
+}
+
+app.post('/authenticate', auth() , (req, res) => {
+  console.log(req.user)
+  res.status(200).json({"statusCode" : 200 ,"message" : "hello","data":req.user});
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

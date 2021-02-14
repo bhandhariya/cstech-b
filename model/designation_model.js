@@ -7,6 +7,9 @@ var DesignationSchema = new Schema({
 
 
 
+},{
+    timestamps:true,
+    autoIndex: true
 });
 
 module.exports = mongoose.model('Designation', DesignationSchema);

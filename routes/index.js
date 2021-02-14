@@ -5,6 +5,8 @@ var controller=require('../controller/controller')
 /* GET home page. */
 router.get('/', controller.getAllDesignation);
 
+router.post('/login',controller.login)
+
 router.post('/add-designation',controller.createNewDesignation)
 
 

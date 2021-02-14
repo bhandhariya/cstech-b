@@ -177,19 +177,49 @@ exports.getTimeWiseData=function(req,res,next){
     }
     
 }
+var User=require('../model/user_model')
 exports.test=function(req,res,next){
 
-    var e=new Employee({
-        name:'raja',
-        email:"saini@g.com",
-        salary:21212,
-        designation:"60261c17a38f813680fd06af"    
-    })
-    e.save((err,result)=>{
-        if(err){
-            res.send(err)
+    // var user = new User({
+    //     name:"raja",
+    //     username:"raja",
+    //     emails:[{email:"raja@cstech.com"}],
+    //     password:"cstech@123"
+    // })
+    // user.save((err,result)=>{
+    //     if(result){
+    //         res.send(result)
+    //     }else{
+    //         res.send(err)
+    //     }
+    // })
+
+    User.findOne({
+        "emails.email":"raja@cstech.com"
+    }).exec((err,result)=>{
+        if(result){
+            res.send(result)
         }else{
-            console.log(result)
+            res.send(err)
         }
     })
+
+}
+
+const passport = require('passport');
+exports.login=function(req,res,next){
+    passport.authenticate('local', function(err, user, info) {
+        if (err) {
+            res.json({
+                type: false,
+                code: "S000",
+                data: err
+            })
+        } else {
+            res.json(user)
+        }
+    })(req, res, next);
+   
+  
+
 }
