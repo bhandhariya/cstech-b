@@ -215,20 +215,9 @@ exports.test=function(req,res,next){
 
 }
 
-const passport = require('passport');
+const axios = require('axios');
 exports.login=function(req,res,next){
-    passport.authenticate('local', function(err, user, info) {
-        if (err) {
-            res.json({
-                type: false,
-                code: "S000",
-                data: err
-            })
-        } else {
-            res.json(user)
-        }
-    })(req, res, next);
+
    
   
-
 }

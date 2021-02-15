@@ -36,16 +36,8 @@ const isLoggedIn = (req, res, next) => {
 
 passport.use(new LocalStrategy(
   function(username, password, done) {
-    console.log(username,password)
-    
-      // if(username === "admin" && password === "admin"){
-      //   console.log('raja')
-      //     return done(null, username);
-      // } else {
-      //     return done("unauthorized access", false);
-      // }
       User.findOne({ username: username }, function (err, user) {
-        if (err) { return done(err); }
+        if (err) { return done(null,false,{message:"user not found"}); }
         // Return if user not found in database
         if (!user) {
           return done(null, false, {

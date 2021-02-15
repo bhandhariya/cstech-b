@@ -1,1 +1,7 @@
-GET http://localhost:3000/users/test
+POST http://localhost:3000/login HTTP/1.1
+content-type: application/json
+
+{
+    "name": "raja",
+    "time": "cstech@123"
+}
