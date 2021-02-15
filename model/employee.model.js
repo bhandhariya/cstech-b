@@ -17,14 +17,22 @@ var EmployeeSchema = new Schema({
         minlength: 4,
         lowercase: true
     },
-    emails: [emailSchema],
-    designation: {type:Schema.ObjectId,ref:'Designation'},
-    course: {
-        type: String,
-        enum: ['MCA', 'BCA', 'BSC',null],
-        default: null
+    emails: {
+        type:String,  
+        required: true,
+        lowercase: true,
+        unique: true
     },
+    designation: {type:Schema.ObjectId,ref:'Designation'},
+    course: [
+        {type:String}
+    ],
     phone: {
+        type: Number,
+        trim: true,
+        default: ''
+    },
+    salary: {
         type: Number,
         trim: true,
         default: ''

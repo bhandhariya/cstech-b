@@ -40,9 +40,15 @@ exports.createNewEmployee=function(req,res,next){
     try{
         var emp = new Employee({
             name:req.body.name,
-            email:req.body.email,
+            emails:req.body.email,
             salary:req.body.salary,
             designation:req.body.designation,
+            imageURL:req.body.image,
+            phone:req.body.mobile,
+            gender:req.body.gender,
+            course:req.body.course,
+            active:true,
+            salary:req.body.salary
         })
     
         emp.save((error,result)=>{
@@ -82,6 +88,9 @@ exports.SaveEditEmployee=function(req,res,next){
             email:req.body.email,
             salary:req.body.salary,
             designation:req.body.designation,
+            gender:req.body.gender,
+            imageURL:req.body.image,
+            phone:req.body.mobile
            }).exec((err,result)=>{
                if(result){
                    res.send(result)
@@ -180,29 +189,29 @@ exports.getTimeWiseData=function(req,res,next){
 var User=require('../model/user_model')
 exports.test=function(req,res,next){
 
-    // var user = new User({
-    //     name:"raja",
-    //     username:"raja",
-    //     emails:[{email:"raja@cstech.com"}],
-    //     password:"cstech@123"
-    // })
-    // user.save((err,result)=>{
-    //     if(result){
-    //         res.send(result)
-    //     }else{
-    //         res.send(err)
-    //     }
-    // })
-
-    User.findOne({
-        "emails.email":"raja@cstech.com"
-    }).exec((err,result)=>{
+    var user = new User({
+        name:"raja",
+        username:"raja",
+        emails:"raja@cstech.com",
+        password:"cstech@123"
+    })
+    user.save((err,result)=>{
         if(result){
             res.send(result)
         }else{
             res.send(err)
         }
     })
+
+    // User.findOne({
+    //     "emails.email":"raja@cstech.com"
+    // }).exec((err,result)=>{
+    //     if(result){
+    //         res.send(result)
+    //     }else{
+    //         res.send(err)
+    //     }
+    // })
 
 }
 
