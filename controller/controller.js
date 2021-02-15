@@ -90,7 +90,8 @@ exports.SaveEditEmployee=function(req,res,next){
             designation:req.body.designation,
             gender:req.body.gender,
             imageURL:req.body.image,
-            phone:req.body.mobile
+            phone:req.body.mobile,
+            course:req.body.course
            }).exec((err,result)=>{
                if(result){
                    res.send(result)
