@@ -85,7 +85,7 @@ exports.SaveEditEmployee=function(req,res,next){
     try{
         Employee.findByIdAndUpdate(req.body.id,{
             name:req.body.name,
-            email:req.body.email,
+            emails:req.body.email,
             salary:req.body.salary,
             designation:req.body.designation,
             gender:req.body.gender,
