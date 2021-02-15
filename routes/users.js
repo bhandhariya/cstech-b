@@ -17,4 +17,9 @@ router.get('/time',controller.getTimeWiseData);
 
 router.get('/test',controller.test);
 
+router.post('/activate',controller.activate);
+
+router.post('/deactivate',controller.deactivate);
+
+
 module.exports = router;

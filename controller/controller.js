@@ -219,6 +219,38 @@ exports.test=function(req,res,next){
 const axios = require('axios');
 exports.login=function(req,res,next){
 
-   
+
   
+}
+
+exports.activate=async (req,res,next)=>{
+    try{
+         await   Employee.findByIdAndUpdate(req.body.id,{
+            active:true
+        }).exec((err,result)=>{
+            if(result){
+                res.send(result)
+            }else{
+                res.send(err)
+            }
+        })
+    }catch(error){
+        res.send(error)
+    }
+}
+
+exports.deactivate=async (req,res,next)=>{
+    try{
+         await   Employee.findByIdAndUpdate(req.body.id,{
+            active:false
+        }).exec((err,result)=>{
+            if(result){
+                res.send(result)
+            }else{
+                res.send(err)
+            }
+        })
+    }catch(error){
+        res.send(error)
+    }
 }
