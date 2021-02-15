@@ -2,6 +2,7 @@
 const mongoose = require('mongoose');
 const emailSchema=require('./email-model')
 var passportLocalMongoose = require('passport-local-mongoose');
+var passport=require('passport')
 const userSchema = new mongoose.Schema(
     {
         name: {
@@ -40,4 +41,9 @@ userSchema.plugin(passportLocalMongoose)
 
 
 const User = mongoose.model('User', userSchema, 'users');
+
+passport.use(User.createStrategy());
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 module.exports = User;
